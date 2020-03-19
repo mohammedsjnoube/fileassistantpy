@@ -1,5 +1,6 @@
 from telethon import TelegramClient, events
 from download_from_url import download_file, get_size
+from config import BOTTOKEN, APIID, APIHASH, DOWNLOADPATH, USERNAME
 import os
 import time
 import datetime
@@ -7,13 +8,7 @@ import aiohttp
 from hurry.filesize import size, si
 import traceback
 
-api_id = int("8")
-api_hash = "7245de8e747a0d6fbe11f7cc14fcc0bb"
-bot_token = "Edit"
-download_path = "Downloads/"
-
-username = "@URLYUKLEBOT"
-bot = TelegramClient('upbot', api_id, api_hash).start(bot_token=bot_token)
+bot = TelegramClient('upbot', APIID, APIHASH).start(bot_token=BOTTOKEN)
 
 def get_date_in_two_weeks():
     """
@@ -46,13 +41,13 @@ async def send_to_transfersh_async(file):
 @bot.on(events.NewMessage(pattern='/start'))
 async def start(event):
     """Send a message when the command /start is issued."""
-    await event.respond('Hi!\nSent any file or direct download url to get the transfer.sh download link')
+    await event.respond('Hi! please send me any file url or file uploaded in Telegram and I will upload to Telegram as file or generate download link of that file. Also you can upload sent file to TransferSh / TmpNinja.')
     raise events.StopPropagation
 
 @bot.on(events.NewMessage(pattern='/up'))
 async def up(event):
-    if not os.path.isdir(download_path):
-        os.mkdir(download_path)
+    if not os.path.isdir(DOWNLOADPATH):
+        os.mkdir(DOWNLOADPATH)
 
     if event.reply_to_msg_id:
         start = time.time()
@@ -60,7 +55,7 @@ async def up(event):
         ilk = await event.respond("Downloading...")
         
         try:
-            filename = os.path.join(download_path, os.path.basename(url.text))
+            filename = os.path.join(DOWNLOADPATH, os.path.basename(url.text))
             file_path = await download_file(url.text, filename, ilk, start, bot)
         except Exception as e:
             print(e)
@@ -77,7 +72,7 @@ async def up(event):
             dosya = await bot.upload_file(filename, progress_callback=progress)
 
             zaman = str(time.time() - start)
-            await bot.send_file(event.chat.id, dosya, caption=f"{filename} uploaded in {zaman} seconds! By {username}")
+            await bot.send_file(event.chat.id, dosya, caption=f"{filename} uploaded in {zaman} seconds! By {USERNAME}")
         except Exception as e:
             traceback.print_exc()
 
@@ -90,11 +85,9 @@ async def up(event):
 
 @bot.on(events.NewMessage(pattern='/transfersh'))
 async def tsh(event):
-    # Developing.
-
-@bot.on(events.NewMessage(pattern='/tmpninja'))
-async def tsh(event):
-    # Developing.
+    """Send a message when the command /start is issued."""
+    await event.respond('Hi!\nSent any file or direct download url to get the transfer.sh download link')
+    raise events.StopPropagation
 
 def main():
     """Start the bot."""
