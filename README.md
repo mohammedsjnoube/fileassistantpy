@@ -13,7 +13,7 @@ Telethon version of FileAssistant. Look at the [PHP version](https://github.com/
 
 - [ ] Files to Link
 
-- [ ] TransferSh Uploader
+- [x] TransferSh Uploader
 
 - [ ] TmpNinja Uploader
 
