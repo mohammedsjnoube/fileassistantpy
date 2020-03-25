@@ -4,8 +4,9 @@ from config import BOTTOKEN, APIID, APIHASH, DOWNLOADPATH, USERNAME
 import os
 import time
 import datetime
+import asyncio
 import aiohttp
-from hurry.filesize import size, si
+from utils import progress, humanbytes, time_formatter
 import traceback
 
 bot = TelegramClient('upbot', APIID, APIHASH).start(bot_token=BOTTOKEN)
@@ -46,9 +47,6 @@ async def start(event):
 
 @bot.on(events.NewMessage(pattern='/up'))
 async def up(event):
-    if not os.path.isdir(DOWNLOADPATH):
-        os.mkdir(DOWNLOADPATH)
-
     if event.reply_to_msg_id:
         start = time.time()
         url = await event.get_reply_message()
@@ -65,11 +63,10 @@ async def up(event):
 
         try:
             orta = await event.respond("Uploading to Telegram...")
-            async def progress(current, total):
-                sonuc = (current / total) * 100
-                await orta.edit("Uploading to Telegram...\nStatus: %" + str(round(sonuc,2)) + "\nSize: " + str(size(current, system=si)) + "/" + str(size(total, system=si))) 
 
-            dosya = await bot.upload_file(filename, progress_callback=progress)
+            dosya = await bot.upload_file(filename, progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, orta, start, "Uploading to Telegram...")
+                ))
 
             zaman = str(time.time() - start)
             await bot.send_file(event.chat.id, dosya, caption=f"{filename} uploaded in {zaman} seconds! By {USERNAME}")
@@ -85,11 +82,38 @@ async def up(event):
 
 @bot.on(events.NewMessage(pattern='/transfersh'))
 async def tsh(event):
-    """Send a message when the command /start is issued."""
-    await event.respond('Hi!\nSent any file or direct download url to get the transfer.sh download link')
+    if event.reply_to_msg_id:
+        start = time.time()
+        url = await event.get_reply_message()
+        ilk = await event.respond("Downloading...")
+        try:
+            file_path = await url.download_media(progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(d, t, ilk, start, "Downloading...")
+                ))
+        except Exception as e:
+            traceback.print_exc()
+            print(e)
+            await event.respond(f"Downloading Failed\n\n**Error:** {e}")
+        
+        await ilk.delete()
+
+        try:
+            orta = await event.respond("Uploading to TransferSh...")
+            download_link, final_date, size = await send_to_transfersh_async(file_path)
+
+            zaman = str(time.time() - start)
+            await orta.edit(f"File Successfully Uploaded to TransferSh.\n\nLink:{download_link}\nExpired Date:{final_date}")
+        except Exception as e:
+            traceback.print_exc()
+            print(e)
+            await event.respond(f"Uploading Failed\n\n**Error:** {e}")
+
     raise events.StopPropagation
 
 def main():
+    if not os.path.isdir(DOWNLOADPATH):
+        os.mkdir(DOWNLOADPATH)
+
     """Start the bot."""
     print("\nBot started..\n")
     bot.run_until_disconnected()
