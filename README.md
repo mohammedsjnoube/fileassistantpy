@@ -5,7 +5,7 @@ Telethon version of FileAssistant. Look at the [PHP version](https://github.com/
 
 - [x] Link to Files
 
-- [ ] SpeedTest
+- [x] SpeedTest
 
 - [ ] Rename File
 
@@ -15,7 +15,7 @@ Telethon version of FileAssistant. Look at the [PHP version](https://github.com/
 
 - [x] TransferSh Uploader
 
-- [ ] TmpNinja Uploader
+- [x] TmpNinja Uploader
 
 ## Install
 ### Easy:
@@ -23,15 +23,14 @@ Fork repo and edit infos in Config.py then deploy
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 ### Hard:
-`git clone https://github.com/Quiec/fileassistantpy`
 
-`cd fileassistantpy`
-
-`pip install -r requirements.txt`
-
-`nano config.py` // Edit Infos
-
-`python3 bot.py`
+```
+git clone https://github.com/Quiec/fileassistantpy
+cd fileassistantpy
+pip install -r requirements.txt
+nano config.py // Edit Infos
+python3 bot.py
+```
 
 ## Credits
 [My Telegram Channel](https://t.me/quiecs)
