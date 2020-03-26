@@ -1,4 +1,4 @@
 telethon
 asyncio
 aiohttp
-hurry.filesize
+speedtest-cli
