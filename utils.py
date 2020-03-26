@@ -30,6 +30,22 @@ async def progress(current, total, event, start, type_of_ps):
             tmp
         ))
 
+
+def convert_from_bytes(size):
+    power = 2**10
+    n = 0
+    units = {
+        0: "",
+        1: "kilobytes",
+        2: "megabytes",
+        3: "gigabytes",
+        4: "terabytes"
+    }
+    while size > power:
+        size /= power
+        n += 1
+    return f"{round(size, 2)} {units[n]}"
+
 def humanbytes(size):
     """Input size in bytes,
     outputs in a human readable format"""
