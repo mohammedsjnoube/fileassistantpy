@@ -19,7 +19,6 @@ Telethon version of FileAssistant. Look at the [PHP version](https://github.com/
 
 ## Install
 ### Easy:
-Fork repo and edit infos in Config.py then deploy
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 ### Hard:
