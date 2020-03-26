@@ -1,34 +1,8 @@
 import aiohttp
 import os
 import time
+from utils import humanbytes, time_formatter
 from telethon import Button, custom, events
-
-
-
-def get_size(size):
-    units = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB"]
-    size = float(size)
-    i = 0
-    while size >= 1024.0 and i < len(units):
-        i += 1
-        size /= 1024.0
-    return "%.2f %s" % (size, units[i])
-
-def time_formatter(milliseconds: int) -> str:
-    """Inputs time in milliseconds, to get beautified time,
-    as string"""
-    seconds, milliseconds = divmod(int(milliseconds), 1000)
-    minutes, seconds = divmod(seconds, 60)
-    hours, minutes = divmod(minutes, 60)
-    days, hours = divmod(hours, 24)
-    tmp = (
-        ((str(days) + "d, ") if days else "")
-        + ((str(hours) + "h, ") if hours else "")
-        + ((str(minutes) + "m, ") if minutes else "")
-        + ((str(seconds) + "s, ") if seconds else "")
-        + ((str(milliseconds) + "ms, ") if milliseconds else "")
-    )
-    return tmp[:-2]
 
 
 async def download_file(url, file_name, message, start_time, bot):
@@ -43,7 +17,6 @@ async def download_coroutine(session, url, file_name, event, start, bot):
     CHUNK_SIZE = 1024*6 # 2341
     downloaded = 0
     display_message = ""
-    humanbytes = get_size
     async with session.get(url) as response:
         total_length = int(response.headers["Content-Length"])
         content_type = response.headers["Content-Type"]
