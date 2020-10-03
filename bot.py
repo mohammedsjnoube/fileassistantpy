@@ -63,7 +63,7 @@ async def start(event):
     await event.respond('Bhootni ke mna kiya tha na ye command send krne ko.')
     raise events.StopPropagation
 
-@bot.on(events.NewMessage(pattern='/up'))
+@bot.on(events.NewMessage(pattern='/upload'))
 async def up(event):
     if event.reply_to_msg_id:
         start = time.time()
