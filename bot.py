@@ -53,7 +53,14 @@ async def send_to_tmp_async(file):
 @bot.on(events.NewMessage(pattern='/start'))
 async def start(event):
     """Send a message when the command /start is issued."""
-    await event.respond('Hi! please send me any file url or file uploaded in Telegram and I will upload to Telegram as file or generate download link of that file. Also you can upload sent file to TransferSh / TmpNinja. /n/n Available commands //up, //transfersh, //speedtest, //tmpninja')
+    await event.respond('Hi! please send me any file url or file uploaded in Telegram and I will upload to Telegram as file or generate download link of that file. Also you can upload sent file to TransferSh / TmpNinja.')
+    raise events.StopPropagation
+    
+    
+@bot.on(events.NewMessage(pattern='/fun'))
+async def start(event):
+    """Send a message when the command /fun is issued."""
+    await event.respond('Bhootni ke mna kiya tha na ye command send krne ko.')
     raise events.StopPropagation
 
 @bot.on(events.NewMessage(pattern='/up'))
