@@ -13,5 +13,5 @@ BOTTOKEN = "123456:xxxx"
 APIID = 6
 APIHASH = eb06d4abfb49dc3eeb1aeb98ae0f581e
 DOWNLOADPATH = "Downloads/"
-USERNAME = "@NburlUploaderRobot"
+USERNAME = "@Gestiijbot"
 """
